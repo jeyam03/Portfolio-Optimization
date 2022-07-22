@@ -1,9 +1,14 @@
 from datetime import datetime, timedelta
 import yfinance as yf
-import pandas as pd
 
 def discreteStates(weights, symbols, amount, df):
-    cur_date = (datetime.now()-timedelta(days=2)).strftime('%Y-%m-%d')
+    sub = 1
+    if datetime.now().weekday() == 5:
+        sub += 1
+    if datetime.now().weekday() == 6:
+        sub += 2
+
+    cur_date = (datetime.now()-timedelta(days=sub)).strftime('%Y-%m-%d')
     cur_price = df.loc[cur_date]
 
     price = []
@@ -11,21 +16,8 @@ def discreteStates(weights, symbols, amount, df):
     remaining = 0
 
     for i in range(len(weights)):
-        price.append(weights[i] * amount)
-        output_stocks.append(price[i] // cur_price[symbols[i]])
-        remaining += price[i] % cur_price[symbols[i]]
-    print(price)
-    print(output_stocks)
-    print(remaining)
+        output_stocks.append((weights[i] * amount) // cur_price[symbols[i]])
+        price.append(cur_price[symbols[i]] * output_stocks[i])
+        remaining += (weights[i] * amount) % cur_price[symbols[i]]
 
-w = [0.1, 0.6, 0.3]
-s = ['AAPL', 'GOOG', 'AMZN']
-amt = 10000
-cur_date = (datetime.now()-timedelta(days=2)).strftime('%Y-%m-%d')
-
-df = pd.DataFrame()
-for symbol in s:
-    data = yf.download(symbol, start=cur_date, end=cur_date)['Adj Close']
-    df[symbol] = data
-
-discreteStates(w, s, amt, df)
+    return [price, output_stocks, remaining]
