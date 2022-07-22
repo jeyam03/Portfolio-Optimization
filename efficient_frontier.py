@@ -1,7 +1,7 @@
 import numpy as np
 
 def ef(n,df) ->list:
-    returns = df.pct_change()
+    returns = df.pct_change() 
     values=[]
     cov_annual = df.cov()*252
     annualized_returns = (1+returns.mean())**252 -1 #Returns with compounding effect
