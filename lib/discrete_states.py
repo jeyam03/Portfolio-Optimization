@@ -14,8 +14,11 @@ def discreteStates(symbols, amount, df,values):
     out=[]
     dic={}
     for i in values:
-        dic[round(i.er,2)]=[i.ew,i.ex]
-        
+        if round(i.er,2) not in dic:
+            dic[round(i.er,2)]=[i.ew,i.ex]
+        else:
+            if i.ex>dic[round(i.er,2)][1]:
+                dic[round(i.er,2)]=[i.ew,i.ex]        
     for j in dic:
         price = []
         output_stocks = []
@@ -47,5 +50,5 @@ def discreteStates(symbols, amount, df,values):
 
 # values = efficient_frontier.ef(4,df)
 # out = discreteStates(s, amt, df,values)
-# print(out[0])
+# print(out)
 
