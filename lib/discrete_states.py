@@ -14,25 +14,26 @@ def discreteStates(symbols, amount, df,values):
     out=[]
     dic={}
     for i in values:
-        dic[round(i.er,2)]=i.ew
+        dic[round(i.er,2)]=[i.ew,i.ex]
         
     for j in dic:
         price = []
         output_stocks = []
         remaining = 0
-        weights=dic[j]
+        weights=dic[j][0]
+        ex=round(dic[j][1],3)
         for i in range(n):
             output_stocks.append((weights[i] * amount) // cur_price[symbols[i]])
             price.append(cur_price[symbols[i]] * output_stocks[i])
             remaining += (weights[i] * amount) % cur_price[symbols[i]]
 
-        out.append([price, output_stocks, remaining,j])
+        out.append([price, output_stocks, remaining,ex,j])
     return out
 
 # Test code
 # import pandas as pd
 # import yfinance as yf
-#import efficient_frontier
+# import efficient_frontier
 # s = ['AAPL', 'GOOG', 'AMZN',"MSFT"]
 # amt = 10000
 # cur_date = (datetime.now()).strftime('%Y-%m-%d')
