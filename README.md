@@ -6,7 +6,7 @@ Deploying the module as AWS serverless API using AWS lambda and AWS API gateway.
 # Efficient Frontier
 A modern portfolio theory for estimating maximmum expected return for a given risk. Instead of using formula 10000 monte carlo simulation have been caluclated for the given portfolio and the maximum expected return is calculated for a given risk using the simulations.  
      
-<img src = "https://miro.medium.com/max/759/1*tjA69EtX1dmN76iQTUWF9Q.jpeg" >
+<img src = "https://miro.medium.com/max/759/1*tjA69EtX1dmN76iQTUWF9Q.jpeg" width = 350 height = 300 class=center>
 
 # Assumptions
 1. All investors make decision rationally and have knowledge about all the facts of the markets
