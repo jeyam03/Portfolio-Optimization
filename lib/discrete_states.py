@@ -2,15 +2,13 @@ from datetime import datetime, timedelta
 
 
 def discreteStates(symbols, amount, df,values):
-    n=len(symbols)
-    sub = 1
-    if datetime.now().weekday() == 5:
-        sub += 1
-    if datetime.now().weekday() == 6:
-        sub += 2
-
-    cur_date = (datetime.now()-timedelta(days=sub)).strftime('%Y-%m-%d')
+    cur_date = df.tail(1).index[0]
+    #print(cur_date)
     cur_price = df.loc[cur_date]
+    #print(cur_price)
+    n=len(symbols)
+    if sum(cur_price)>amount:
+        return -1
     out=[]
     dic={}
     for i in values:

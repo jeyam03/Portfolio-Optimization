@@ -5,22 +5,57 @@ from lib import discrete_states
 
 
 def main(amount : float,stocks : list) -> list:
-    df = dataframe.getStockData(stocks)
+    try:
+        df = dataframe.getStockData(stocks)
+    except:
+        return []
     n=len(stocks)
     values = efficient_frontier.ef(n=n,df=df)
     out = discrete_states.discreteStates(stocks,amount,df,values)
     #print(out)
     return out
 
-def lambda_handler(event : dict, context):
-    amount = event['queryStringParameters']['amount']
-    stocks = event['queryStringParameters']['stocks']
+def lambda_handler(event : dict, context=None):
+    try:
+        amount = event['queryStringParameters']['amount']
+        stocks = event['queryStringParameters']['stocks']
+    except:
+        return {
+            'statusCode': 400,
+            'body': {
+                'msg':json.dumps('Parameters error in request')
+                }
+        }
+
     stocks = stocks.split(',')
     n=len(stocks)
+    try :
+        amount = float(amount)
+    except:
+        return {
+            'statusCode': 400,
+            'body': {
+                'msg':json.dumps('Enter Valid Amount')
+            }
+        }
     for i in range(n):
         stocks[i]=stocks[i].strip()
         stocks[i]=stocks[i].upper()
     out = main(float(amount),stocks)
+    if out ==[]:
+        return {
+            'statusCode': 400,
+            'body': {
+                'msg':json.dumps('Invalid stock name')
+            }
+        }
+    if out == -1:
+        return {
+            'statusCode': 400,
+            'body': {
+                'msg':json.dumps('Insufficient funds')
+            }
+        }
     d={}
     c=1
     for i in out:
@@ -32,14 +67,14 @@ def lambda_handler(event : dict, context):
         c+=1
     return {
         'statusCode': 200,
-        "body": d
+        "body": {"symbols":stocks,"list":d}
     }
 
 #test
 # js = {
 #     "queryStringParameters": {
-#     "amount": "10000",
+#     "amount": "5000",
 #     "stocks": "AAPL,GOOG,AMZN,MSFT"
 #     }
 # }
-# print(lambda_handler(js,None))
+print(lambda_handler(js,None))
